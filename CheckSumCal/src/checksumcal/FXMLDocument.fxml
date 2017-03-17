@@ -7,10 +7,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="311.0" prefWidth="599.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="checksumcal.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="311.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="checksumcal.FXMLDocumentController">
    <children>
-      <Button fx:id="originalButton" layoutX="43.0" layoutY="75.0" mnemonicParsing="false" onAction="#handleOriginalButtonAction" text="Select original file" />
-      <Button fx:id="tunedButton" layoutX="43.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleOriginalButtonAction" prefHeight="31.0" prefWidth="138.0" text="Select tuned file" />
+      <Button fx:id="originalButton" layoutX="43.0" layoutY="75.0" mnemonicParsing="false" onAction="#handleFileSelectButtonAction" text="Select original file" />
+      <Button fx:id="tunedButton" layoutX="43.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleFileSelectButtonAction" prefHeight="31.0" prefWidth="138.0" text="Select tuned file" />
       <Label fx:id="originalLabel" layoutX="191.0" layoutY="73.0" prefHeight="38.0" prefWidth="293.0" style="-fx-font-weight: bold;">
          <font>
             <Font size="20.0" />
@@ -21,7 +21,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button fx:id="newChecksumButton" layoutX="43.0" layoutY="205.0" mnemonicParsing="false" onAction="#handleCalculatedButtonAction" prefHeight="31.0" prefWidth="206.0" text="Calculate new checksum" />
+      <Button fx:id="newChecksumButton" layoutX="43.0" layoutY="205.0" mnemonicParsing="false" onAction="#handleCalculateButtonAction" prefHeight="31.0" prefWidth="206.0" text="Calculate new checksum" />
       <Label fx:id="resultLabel" layoutX="45.0" layoutY="251.0" prefHeight="38.0" prefWidth="431.0" style="-fx-font-weight: bold;">
          <font>
             <Font size="20.0" />

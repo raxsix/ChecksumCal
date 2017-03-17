@@ -25,6 +25,7 @@ public class CheckSumCal extends Application {
 
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.setTitle("Checksum Calculator");
         stage.show();
     }
 }
