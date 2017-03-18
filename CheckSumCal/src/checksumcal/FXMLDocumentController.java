@@ -28,6 +28,8 @@ import javafx.stage.Stage;
  * the tuned ECU file checksum that it will match the original one This program
  * takes in two files which are described in hexadecimal and the max file size
  * should be 32768 byte because this is the size of specific ECU flash memory.
+ * Test files can be found in ECU_test_files folder
+ * Program will generate new tuned file with correct checksum called result.bin if all goes well
  *
  * @author Ragnar
  */
@@ -76,6 +78,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleFileSelectButtonAction(ActionEvent event) {
 
+        
         // This will open file chooser dialog window to select a file
         FileChooser fileChooser = new FileChooser();
         Stage stage = (Stage) root.getScene().getWindow();
@@ -116,27 +119,26 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleCalculateButtonAction(ActionEvent event) {
-
-        mOriginalChecksum = calculateChecksum(mOriginalFile.getAbsolutePath(), true);
+        
+        setAllTextLabelsBlank();
+        mOriginalChecksum = calculateChecksum(mOriginalFile.getAbsolutePath(), false);
         originalLabel.setText("Checksum: " + Integer.toHexString(mOriginalChecksum).toUpperCase());
 
-        mTunedChecksum = calculateChecksum(mTunedFile.getAbsolutePath(), true);
+        mTunedChecksum = calculateChecksum(mTunedFile.getAbsolutePath(), false);
         tunedLabel.setText("Checksum: " + Integer.toHexString(mTunedChecksum).toUpperCase());
-
-        if (mOriginalChecksum == mTunedChecksum) {
-            infoLabel.setText("SAME FILE");
-        } else {
-            infoLabel.setTextFill(Color.web("#bf0101"));
-            infoLabel.setText("ERROR");
-        }
 
         // Most of the time the tuned file checksum will be large because the chip tuner probably will rise map values
         if (mOriginalChecksum < mTunedChecksum) {
 
-            mCorrectionValue = calculateCorrectionValue(checkSumDivision(mOriginalChecksum, mTunedChecksum));
+            mCorrectionValue = calculateCorrectionValue(checkSumSubtraction(mOriginalChecksum, mTunedChecksum));
             correctChecksum(mTunedFile.getAbsolutePath(), mCorrectionValue, mOriginalChecksum);
+        }else{
+            infoLabel.setTextFill(Color.web("#bf0101"));
+            infoLabel.setText("ERROR");
         }
-        
+         if (mOriginalChecksum == mTunedChecksum) {
+            infoLabel.setText("SAME FILE");
+        }
         // DOTO: handle this rear case when the tuned checksum will be smaller than original
     }
 
@@ -282,7 +284,7 @@ public class FXMLDocumentController implements Initializable {
             File tempFile = new File(TEMP_FILE_NAME);
             tempFile.delete();
 
-            array[placeToWrite + correctionValue] = finalCorrection(checkSumDivision(tempChecksum, originalChecksum));
+            array[placeToWrite + correctionValue] = finalCorrection(checkSumSubtraction(tempChecksum, originalChecksum));
 
             try (OutputStream os = new FileOutputStream(RESULT_FILE_NAME)) {
                 for (int c : array) {
@@ -319,8 +321,16 @@ public class FXMLDocumentController implements Initializable {
         return divisionResult / 255;
     }
 
-    public static int checkSumDivision(int original, int tuned) {
+    public static int checkSumSubtraction(int original, int tuned) {
 
         return Math.abs(tuned - original);
+    }
+
+    private void setAllTextLabelsBlank() {
+        
+        originalLabel.setText("");
+        tunedLabel.setText("");
+        infoLabel.setText("");
+        resultLabel.setText("");
     }
 }
